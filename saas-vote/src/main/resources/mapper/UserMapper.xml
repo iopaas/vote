@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ntc.paas.plat.dao.UserDao">
+  <resultMap id="BaseResultMap" type="com.ntc.paas.plat.entity.User">
+      <id column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <result column="user_number" property="userNumber" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="user_name" property="userNme" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="mobile" property="mobile" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="email" property="email" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="id_card" property="idCard" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="status" property="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <result column="create_time"  property="createTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <result column="update_time"  property="updateTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, user_number, user_name, mobile, email, id_card, status, create_time, 
+    update_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByIdCard" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_user
+    where id_card = #{idCard,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="queryListByPage" parameterType="com.ntc.paas.plat.model.VoteUserQuery" resultMap="BaseResultMap">
+    select 
+       u.id, u.user_number, u.user_name, u.mobile, u.email, u.id_card, u.status, v.create_time, v.update_time
+    from ntc_user_vote v
+    left join ntc_user u
+    on v.user_id = u.id
+    where 1 = 1 
+    <if test="activityId != null">
+       and v.activity_id = #{activityId,jdbcType=BIGINT}
+    </if>
+    order by v.id desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ntc_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ntc.paas.plat.entity.User" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_user (id, user_number, user_pwdmd5, 
+      user_name, mobile, email, 
+      id_card, status, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{userNumber,jdbcType=VARCHAR}, #{userPwdmd5,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.ntc.paas.plat.entity.User" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userNumber != null">
+        user_number,
+      </if>
+      <if test="userPwdmd5 != null">
+        user_pwdmd5,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="mobile != null">
+        mobile,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userNumber != null">
+        #{userNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwdmd5 != null">
+        #{userPwdmd5,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntc.paas.plat.entity.User">
+    update ntc_user
+    <set>
+      <if test="userNumber != null">
+        user_number = #{userNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="userPwdmd5 != null">
+        user_pwdmd5 = #{userPwdmd5,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != null">
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ntc.paas.plat.entity.User">
+    update ntc_user
+    set user_number = #{userNumber,jdbcType=VARCHAR},
+      user_pwdmd5 = #{userPwdmd5,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

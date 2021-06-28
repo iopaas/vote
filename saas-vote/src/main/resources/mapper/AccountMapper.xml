@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ntc.paas.plat.dao.AccountDao" >
+  <resultMap id="BaseResultMap" type="com.ntc.paas.plat.entity.Account" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="account_number" property="account_number" jdbcType="VARCHAR" />
+    <result column="account_pwdmd5" property="account_pwdmd5" jdbcType="VARCHAR" />
+    <result column="account_name" property="account_name" jdbcType="VARCHAR" />
+    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+    <result column="role_id" property="role_id" jdbcType="BIGINT" />
+    <result column="last_login_time" property="last_login_time" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_user" property="create_user" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="VARCHAR" />
+    <result column="update_user" property="update_user" jdbcType="VARCHAR" />
+    <result column="update_time" property="update_time" jdbcType="VARCHAR" />
+    <association property="role"  column="role_id" select="com.ntc.paas.plat.dao.RoleDao.selectByPrimaryKey"></association>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, account_number, account_name,  
+    mobile, role_id, last_login_time, status, 
+    create_user, create_time, update_user, update_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_account
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ntc_account
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ntc.paas.plat.entity.Account" useGeneratedKeys="true" keyProperty="id" >
+    insert into ntc_account (
+      account_number, account_pwdmd5, 
+      account_name, mobile, role_id, status, 
+      create_user, create_time, update_user, 
+      update_time)
+    values (
+      #{account_number,jdbcType=VARCHAR}, #{account_pwdmd5,jdbcType=VARCHAR}, 
+      #{account_name,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, 
+      #{role_id,jdbcType=BIGINT},#{status,jdbcType=INTEGER}, 
+      #{create_user,jdbcType=VARCHAR}, #{create_time,jdbcType=VARCHAR}, 
+      #{update_user,jdbcType=VARCHAR},#{update_time,jdbcType=VARCHAR}
+    )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.ntc.paas.plat.entity.Account" useGeneratedKeys="true" keyProperty="id" >
+    insert into ntc_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="account_number != ''" >
+        account_number,
+      </if>
+      <if test="account_pwdmd5 != ''" >
+        account_pwdmd5,
+      </if>
+      <if test="account_name != ''" >
+        account_name,
+      </if>
+      <if test="mobile != ''" >
+        mobile,
+      </if>
+      <if test="role_id != 0" >
+        role_id,
+      </if>
+      <if test="status != 0" >
+        status,
+      </if>
+      <if test="create_user != ''" >
+        create_user,
+      </if>
+      <if test="create_time != ''" >
+        create_time,
+      </if>
+      <if test="update_user != ''" >
+        update_user,
+      </if>
+      <if test="update_time != ''" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="account_number != ''" >
+        #{account_number,jdbcType=VARCHAR},
+      </if>
+      <if test="account_pwdmd5 != ''" >
+        #{account_pwdmd5,jdbcType=VARCHAR},
+      </if>
+      <if test="account_name != ''" >
+        #{account_name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != ''" >
+        #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="role_id != 0" >
+        #{role_id,jdbcType=BIGINT},
+      </if>
+      <if test="status != 0" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="create_user != ''" >
+        #{create_user,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != ''" >
+        #{create_time,jdbcType=VARCHAR},
+      </if>
+      <if test="update_user != ''" >
+        #{update_user,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != ''" >
+        #{update_time,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntc.paas.plat.entity.Account" >
+    update ntc_account
+    <set >
+      <if test="account_number !=''" >
+        account_number = #{account_number,jdbcType=VARCHAR},
+      </if>
+      <if test="account_pwdmd5 != ''" >
+        account_pwdmd5 = #{account_pwdmd5,jdbcType=VARCHAR},
+      </if>
+      <if test="account_name != ''" >
+        account_name = #{account_name,jdbcType=VARCHAR},
+      </if>
+      <if test="mobile != ''" >
+        mobile = #{mobile,jdbcType=VARCHAR},
+      </if>
+      <if test="role_id != 0" >
+        role_id = #{role_id,jdbcType=BIGINT},
+      </if>
+      <if test="last_login_time !=''" >
+        last_login_time = #{last_login_time,jdbcType=VARCHAR},
+      </if>
+      <if test="status != 0" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="create_user != ''" >
+        create_user = #{create_user,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != ''" >
+        create_time = #{create_time,jdbcType=VARCHAR},
+      </if>
+      <if test="update_user !=''" >
+        update_user = #{update_user,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != ''" >
+        update_time = #{update_time,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ntc.paas.plat.entity.Account" >
+    update ntc_account
+    set account_number = #{account_number,jdbcType=VARCHAR},
+      account_pwdmd5 = #{account_pwdmd5,jdbcType=VARCHAR},
+      account_name = #{account_name,jdbcType=VARCHAR},
+      mobile = #{mobile,jdbcType=VARCHAR},
+      role_id = #{role_id,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      update_user = #{update_user,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryListByCond" resultMap="BaseResultMap" parameterType="com.ntc.paas.plat.model.AccountQuery" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_account
+    where 1 = 1
+    and role_id !=  100001
+    <if test=" account_number != ''" >
+       and account_number like CONCAT(CONCAT('%',#{account_number},'%'))
+    </if>
+    <if test="account_name != ''" >
+       and account_name like CONCAT(CONCAT('%',#{account_name},'%'))
+    </if>
+    <if test="role_id != 0" >
+       and role_id = #{role_id,jdbcType=BIGINT}
+    </if>
+	<if test="status != 0" >
+	   and status = #{status,jdbcType=BIGINT}
+	</if>
+	order by update_time desc
+  </select>
+ 
+  <select id="queryListByPage" resultMap="BaseResultMap" parameterType="com.ntc.paas.plat.model.AccountQuery" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_account
+    where 1 = 1
+    and status != 3
+    and role_id != 100001
+     <if test="account_number != ''" >
+        and account_number like CONCAT(CONCAT('%',#{account_number},'%'))
+     </if>
+     <if test="account_name != ''" >
+        and account_name like CONCAT(CONCAT('%',#{account_name},'%'))
+     </if>
+     <if test="role_id != 0" >
+        and role_id = #{role_id,jdbcType=BIGINT}
+     </if>
+     order by update_time desc
+  </select>
+  
+  <update id="updateStatus"  parameterType="com.ntc.paas.plat.entity.Account" >
+    update ntc_account
+    set
+      status = #{status,jdbcType=INTEGER},
+      update_user = #{update_user,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryForLogin" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_account
+    where account_number = #{account_number,jdbcType=VARCHAR}
+    and   account_pwdmd5 = #{account_pwdmd5,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="updateAccountPwd"   parameterType="com.ntc.paas.plat.model.AccountPwd">
+    update ntc_account
+    set
+      account_pwdmd5 = #{account_pwd_new,jdbcType=VARCHAR},
+      update_user = #{update_user,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=VARCHAR}
+    where account_number = #{account_number,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateLastLoginTime" >
+    update ntc_account
+    set
+      last_login_time = #{last_login_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByAccountNumber" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_account
+    where account_number = #{account_number,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

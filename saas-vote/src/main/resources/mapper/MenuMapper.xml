@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ntc.paas.plat.dao.MenuDao" >
+
+  <resultMap id="BaseResultMap" type="com.ntc.paas.plat.entity.Menu" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="parent_id" property="parent_id" jdbcType="BIGINT" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="order" property="order" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_user" property="create_user" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="VARCHAR" />
+    <result column="update_user" property="update_user" jdbcType="VARCHAR" />
+    <result column="update_time" property="update_time" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, name, level, parent_id, url, icon, `order`, status, create_user, create_time, update_user, 
+    update_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_menu
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ntc_menu
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ntc.paas.plat.entity.Menu" >
+    insert into ntc_menu (
+      name, level, 
+      parent_id, url, icon, 
+      order, create_user, create_time, 
+      update_user, update_time)
+    values (
+      #{name,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, 
+      #{parent_id,jdbcType=BIGINT}, #{url,jdbcType=VARCHAR}, #{icon,jdbcType=VARCHAR}, 
+      #{order,jdbcType=INTEGER}, #{create_user,jdbcType=VARCHAR}, #{create_time,jdbcType=VARCHAR}, 
+      #{update_user,jdbcType=VARCHAR}, #{update_time,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.ntc.paas.plat.entity.Menu" >
+    insert into ntc_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != 0" >
+        id,
+      </if>
+      <if test="name != ''" >
+        name,
+      </if>
+      <if test="level != 0" >
+        level,
+      </if>
+      <if test="parent_id != 0" >
+        parent_id,
+      </if>
+      <if test="url != ''" >
+        url,
+      </if>
+      <if test="icon != ''" >
+        icon,
+      </if>
+      <if test="order != 0" >
+        order,
+      </if>
+      <if test="create_user != ''" >
+        create_user,
+      </if>
+      <if test="create_time != ''" >
+        create_time,
+      </if>
+      <if test="update_user != ''" >
+        update_user,
+      </if>
+      <if test="update_time != ''" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != 0" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != ''" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="level != 0" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="parent_id != 0" >
+        #{parent_id,jdbcType=BIGINT},
+      </if>
+      <if test="url != ''" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != ''" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="order != 0" >
+        #{order,jdbcType=INTEGER},
+      </if>
+      <if test="create_user != ''" >
+        #{create_user,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != ''" >
+        #{create_time,jdbcType=VARCHAR},
+      </if>
+      <if test="update_user != ''" >
+        #{update_user,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != ''" >
+        #{update_time,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntc.paas.plat.entity.Menu" >
+    update ntc_menu
+    <set >
+      <if test="name != ''" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="level != 0" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="parent_id != 0" >
+        parent_id = #{parent_id,jdbcType=BIGINT},
+      </if>
+      <if test="url != ''" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != ''" >
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="order != 0" >
+        order = #{order,jdbcType=INTEGER},
+      </if>
+      <if test="create_user != ''" >
+        create_user = #{create_user,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != ''" >
+        create_time = #{create_time,jdbcType=VARCHAR},
+      </if>
+      <if test="update_user != ''" >
+        update_user = #{update_user,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != ''" >
+        update_time = #{update_time,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ntc.paas.plat.entity.Menu" >
+    update ntc_menu
+    set name = #{name,jdbcType=VARCHAR},
+      level = #{level,jdbcType=INTEGER},
+      parent_id = #{parent_id,jdbcType=BIGINT},
+      url = #{url,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      order = #{order,jdbcType=INTEGER},
+      update_user = #{update_user,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryList" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_menu
+    where status = 1
+    order by `order` asc
+  </select>
+  
+ <select id="queryListByIds" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_menu
+    where status = 1
+    and id in 
+    <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">  
+	  #{id}  
+ 	</foreach> 
+    order by `order` asc
+  </select>
+  
+</mapper>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ntc.paas.plat.dao.ActivityDao">
+  <resultMap id="BaseResultMap" type="com.ntc.paas.plat.entity.Activity">
+    <id column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="activity_title" property="activityTitle" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="start_time"  property="startTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="end_time"  property="endTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="status"  property="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    <result column="create_time"  property="createTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="update_time"  property="updateTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <collection property="actMemberList" javaType="ArrayList" ofType="com.ntc.paas.plat.entity.ActivityMember" column="id" select="com.ntc.paas.plat.dao.ActivityMemberDao.selectListByActId">
+       <id column="id" property="id"/>
+       <result column="member_id" property="memberId"/>
+    </collection>
+  </resultMap>
+  
+  <resultMap id="ResultMapWithBLOBs" type="com.ntc.paas.plat.entity.Activity">
+    <id column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="activity_title" property="activityTitle" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="activity_desc" property="activityDesc" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="start_time"  property="startTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="end_time"  property="endTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="status"  property="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    <result column="create_time"  property="createTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="update_time"  property="updateTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <collection property="actMemberList" javaType="ArrayList" ofType="com.ntc.paas.plat.entity.ActivityMember" column="id" select="com.ntc.paas.plat.dao.ActivityMemberDao.selectListByActId">
+       <id column="id" property="id"/>
+       <result column="member_id" property="memberId"/>
+    </collection>
+  </resultMap>
+  
+  <resultMap id="ExtResultMap" type="com.ntc.paas.plat.entity.ActivityExt">
+    <id column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="activity_title" property="activityTitle" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="activity_desc" property="activityDesc" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="start_time"  property="startTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="end_time"  property="endTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="create_time"  property="createTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="update_time"  property="updateTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="vote_flag"  property="voteFlag" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    <collection property="actMemberList" javaType="ArrayList" ofType="com.ntc.paas.plat.entity.ActivityMember" column="id" select="com.ntc.paas.plat.dao.ActivityMemberDao.selectListByActId">
+       <id column="id" property="id"/>
+       <result column="member_id" property="memberId"/>
+    </collection>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, activity_title, start_time, end_time, status, create_time, update_time
+  </sql>
+  
+  <sql id="Blob_Column_List">
+    activity_desc
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from ntc_activity
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="queryList"  parameterType="java.lang.Long" resultMap="ExtResultMap">
+    select 
+      t.id, t.activity_title, t.activity_desc, t.start_time, t.end_time, t.status, t.create_time, t.update_time,
+      IF(v.member_id IS NULL, 0, 1) AS vote_flag
+    from ntc_activity t
+    left join ntc_user_vote v
+    on t.id = v.activity_id
+    <if test="userId != null">
+      and v.user_id = #{userId}
+    </if>
+    where t.status = 1
+    order by t.id desc
+  </select>
+  
+  <select id="queryListByPage"  parameterType="com.ntc.paas.plat.model.ActivityQuery" resultMap="ExtResultMap">
+    select 
+      t.id, t.activity_title, t.activity_desc, t.start_time, t.end_time, t.status, t.create_time, t.update_time
+    from ntc_activity t
+    where 1 = 1
+    <if test="activityTitle != null">
+      and activity_title like CONCAT(CONCAT('%',#{activityTitle},'%'))
+    </if>
+    <if test="activityDesc != null">
+      and activity_desc like CONCAT(CONCAT('%',#{activityDesc},'%'))
+    </if>
+    <if test="startTime != ''" >
+        create_time <![CDATA[ >= ]]> #{startTime,jdbcType=VARCHAR}
+    </if>
+    <if test="endTime != ''" >
+        create_time <![CDATA[ <= ]]> #{endTime,jdbcType=VARCHAR}
+    </if>
+    order by t.id desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ntc_activity
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ntc.paas.plat.entity.Activity" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_activity (id, activity_title, start_time, 
+      end_time, status, create_time, update_time, 
+      activity_desc)
+    values (#{id,jdbcType=BIGINT}, #{activityTitle,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
+      #{endTime,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR}, 
+      #{updateTime,jdbcType=VARCHAR}, #{activityDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.ntc.paas.plat.entity.Activity" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="activityTitle != null">
+        activity_title,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+       <if test="status != null">
+        status,
+       </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="activityDesc != null">
+        activity_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="activityTitle != null">
+        #{activityTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDesc != null">
+        #{activityDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntc.paas.plat.entity.Activity">
+    update ntc_activity
+    <set>
+      <if test="activityTitle != null">
+        activity_title = #{activityTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=VARCHAR},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+      <if test="activityDesc != null">
+        activity_desc = #{activityDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ntc.paas.plat.entity.Activity">
+    update ntc_activity
+    set activity_title = #{activityTitle,jdbcType=VARCHAR},
+        activity_desc = #{activityDesc,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ntc.paas.plat.entity.Activity">
+    update ntc_activity
+    set activity_title = #{activityTitle,jdbcType=VARCHAR},
+       activity_desc = #{activityDesc,jdbcType=LONGVARCHAR},
+      start_time = #{startTime,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

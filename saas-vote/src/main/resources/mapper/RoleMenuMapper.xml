@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ntc.paas.plat.dao.RoleMenuDao" >
+  <resultMap id="BaseResultMap" type="com.ntc.paas.plat.entity.RoleMenu" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="role_id" property="role_id" jdbcType="BIGINT" />
+    <result column="menu_ids" property="menu_ids" jdbcType="VARCHAR" />
+    <result column="menu_all" property="menu_all" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_user" property="create_user" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="VARCHAR" />
+    <result column="update_user" property="update_user" jdbcType="VARCHAR" />
+    <result column="update_time" property="update_time" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, role_id, menu_ids, menu_all, status, create_user, create_time, update_user, update_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_role_menu
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ntc_role_menu
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ntc.paas.plat.entity.RoleMenu" >
+    insert into ntc_role_menu (
+      id, role_id, menu_ids, 
+      menu_all, status, create_user, 
+      create_time, update_user, update_time
+      )
+    values (
+      #{id,jdbcType=BIGINT}, 
+      #{role_id,jdbcType=BIGINT}, 
+      #{menu_ids,jdbcType=VARCHAR}, 
+      #{menu_all,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, 
+      #{create_user,jdbcType=VARCHAR}, 
+      #{create_time,jdbcType=VARCHAR}, 
+      #{update_user,jdbcType=VARCHAR}, 
+      #{update_time,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.ntc.paas.plat.entity.RoleMenu" >
+    insert into ntc_role_menu
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != 0" >
+        id,
+      </if>
+      <if test="role_id != 0" >
+        role_id,
+      </if>
+      <if test="menu_ids != ''" >
+        menu_ids,
+      </if>
+      <if test="menu_all != 0" >
+        menu_all,
+      </if>
+      <if test="status != 0" >
+        status,
+      </if>
+      <if test="create_user != ''" >
+        create_user,
+      </if>
+      <if test="create_time != ''" >
+        create_time,
+      </if>
+      <if test="update_user != ''" >
+        update_user,
+      </if>
+      <if test="update_time != ''" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="role_id != 0" >
+        #{role_id,jdbcType=BIGINT},
+      </if>
+      <if test="menu_ids != ''" >
+        #{menu_ids,jdbcType=VARCHAR},
+      </if>
+      <if test="menu_all != 0" >
+        #{menu_all,jdbcType=INTEGER},
+      </if>
+      <if test="status != 0" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="create_user != ''" >
+        #{create_user,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != ''" >
+        #{create_time,jdbcType=VARCHAR},
+      </if>
+      <if test="update_user != ''" >
+        #{update_user,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != ''" >
+        #{update_time,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntc.paas.plat.entity.RoleMenu" >
+    update ntc_role_menu
+    <set >
+      <if test="role_id != 0" >
+        role_id = #{role_id,jdbcType=BIGINT},
+      </if>
+      <if test="menu_ids != ''" >
+        menu_ids = #{menu_ids,jdbcType=VARCHAR},
+      </if>
+      <if test="menu_all != 0" >
+        menu_all = #{menu_all,jdbcType=INTEGER},
+      </if>
+      <if test="status != 0" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test=" create_user != ''" >
+        create_user = #{create_user,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != ''" >
+        create_time = #{create_time,jdbcType=VARCHAR},
+      </if>
+      <if test="update_user != ''" >
+        update_user = #{update_user,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != ''" >
+        update_time = #{update_time,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ntc.paas.plat.entity.RoleMenu" >
+    update ntc_role_menu
+    set role_id = #{role_id,jdbcType=BIGINT},
+      menu_ids = #{menu_ids,jdbcType=VARCHAR},
+      menu_all = #{menu_all,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      update_user = #{update_user,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryListByCond" resultMap="BaseResultMap" parameterType="com.ntc.paas.plat.model.RoleMenuQuery" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_role_menu
+    where 1 = 1
+    <if test="role_id != 0 ">
+        and role_id = #{role_id,jdbcType=BIGINT}
+    </if>
+        order by update_time desc
+  </select>
+  
+  <select id="queryListByPage" resultMap="BaseResultMap" parameterType="com.ntc.paas.plat.model.RoleMenuQuery" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_role_menu
+    where 1 = 1
+    <if test="role_id != 0 ">
+        and role_id = #{role_id,jdbcType=BIGINT}
+    </if>
+    order by update_time desc
+  </select>
+  
+  <update id="updateStatus" parameterType="com.ntc.paas.plat.entity.RoleMenu" >
+    update ntc_role_menu
+    set
+      status = #{status,jdbcType=INTEGER},
+      update_user = #{update_user,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="queryByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Long"  >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_role_menu
+    where 1 = 1
+    and role_id = #{role_id,jdbcType=BIGINT}
+    limit 1
+  </select>
+  
+</mapper>

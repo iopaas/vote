@@ -1,0 +1,45 @@
+.icon {
+  display: inline-block;
+  width: 17px;
+  height: 15px;
+  overflow: hidden;
+}
+
+@mixin radius($size: 0px, $url: "") {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  background: url($url);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.jr:before {
+  @include radius(15px, "~@/assets/images/jr@2x.png");
+}
+
+.yysj:before {
+  @include radius(15px, "~@/assets/images/yysj@2x.png");
+}
+
+.sqxx:before {
+  @include radius(15px, "~@/assets/images/sqxx@2x.png");
+}
+
+.khxx:before {
+  @include radius(15px, "~@/assets/images/khxx@2x.png");
+}
+
+.tj:before {
+  @include radius(15px, "~@/assets/images/tj@2x.png");
+}
+
+.jj:before {
+  @include radius(15px, "~@/assets/images/198@2x.png");
+}
+
+// .jr:before {
+//   @include radius(15px, "~@/assets/images/jr(1).png");
+// }

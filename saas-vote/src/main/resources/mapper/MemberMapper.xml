@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ntc.paas.plat.dao.MemberDao">
+  <resultMap id="BaseResultMap" type="com.ntc.paas.plat.entity.Member">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="candidate_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="candidate_photo" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="candidate_email" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="candidate_id_card" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="create_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="update_time" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, candidate_name, candidate_photo, candidate_email, candidate_id_card, status, 
+    create_time, update_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_member
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+    
+  <select id="selectList" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_member
+  </select>
+  
+  <select id="queryListByPage" parameterType="com.ntc.paas.plat.model.MemberQuery" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_member
+    where 1 = 1 
+    <if test="candidateName != null">
+      and candidate_name like CONCAT(CONCAT('%',#{candidateName},'%'))
+    </if>
+    <if test="candidateEmail != null">
+      and candidate_email like CONCAT(CONCAT('%',#{candidateEmail},'%'))
+    </if>
+    <if test="candidateIdCard != null">
+      and candidate_id_card like CONCAT(CONCAT('%',#{candidateIdCard},'%'))
+    </if>
+  </select>
+  
+  <select id="selectListByIds"  parameterType="java.util.List" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_member
+    where id in
+    <foreach collection="ids" item="item"  separator="," open="(" close=")" index="">  #{item, jdbcType=BIGINT}   
+    </foreach>
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ntc_member
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ntc.paas.plat.entity.Member" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_member (id, candidate_name, candidate_photo, 
+      candidate_email, candidate_id_card, status, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{candidateName,jdbcType=VARCHAR}, #{candidatePhoto,jdbcType=VARCHAR}, 
+      #{candidateEmail,jdbcType=VARCHAR}, #{candidateIdCard,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.ntc.paas.plat.entity.Member" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_member
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="candidateName != null">
+        candidate_name,
+      </if>
+      <if test="candidatePhoto != null">
+        candidate_photo,
+      </if>
+      <if test="candidateEmail != null">
+        candidate_email,
+      </if>
+      <if test="candidateIdCard != null">
+        candidate_id_card,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="candidateName != null">
+        #{candidateName,jdbcType=VARCHAR},
+      </if>
+      <if test="candidatePhoto != null">
+        #{candidatePhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="candidateEmail != null">
+        #{candidateEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="candidateIdCard != null">
+        #{candidateIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntc.paas.plat.entity.Member">
+    update ntc_member
+    <set>
+      <if test="candidateName != null">
+        candidate_name = #{candidateName,jdbcType=VARCHAR},
+      </if>
+      <if test="candidatePhoto != null">
+        candidate_photo = #{candidatePhoto,jdbcType=VARCHAR},
+      </if>
+      <if test="candidateEmail != null">
+        candidate_email = #{candidateEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="candidateIdCard != null">
+        candidate_id_card = #{candidateIdCard,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ntc.paas.plat.entity.Member">
+    update ntc_member
+    set candidate_name = #{candidateName,jdbcType=VARCHAR},
+      candidate_photo = #{candidatePhoto,jdbcType=VARCHAR},
+      candidate_email = #{candidateEmail,jdbcType=VARCHAR},
+      candidate_id_card = #{candidateIdCard,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ntc.paas.plat.dao.RoleDao" >
+  <resultMap id="BaseResultMap" type="com.ntc.paas.plat.entity.Role" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="role_name" property="role_name" jdbcType="VARCHAR" />
+    <result column="role_desc" property="role_desc" jdbcType="VARCHAR" />
+    <result column="role_count" property="role_count" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="create_user" property="create_user" jdbcType="VARCHAR" />
+    <result column="create_time" property="create_time" jdbcType="VARCHAR" />
+    <result column="update_user" property="update_user" jdbcType="VARCHAR" />
+    <result column="update_time" property="update_time" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, role_name, role_desc, role_count, status, create_user, create_time, update_user, 
+    update_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_role
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ntc_role
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ntc.paas.plat.entity.Role" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_role (
+      role_name, role_desc, 
+      create_user,  create_time, 
+      update_user, update_time
+      )
+    values (
+      #{role_name,jdbcType=VARCHAR},
+      #{role_desc,jdbcType=VARCHAR}, 
+      #{create_user,jdbcType=VARCHAR}, 
+      #{create_time,jdbcType=VARCHAR}, 
+      #{update_user,jdbcType=VARCHAR}, 
+      #{update_time,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.ntc.paas.plat.entity.Role" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="role_name != ''" >
+        role_name,
+      </if>
+      <if test="role_desc != ''" >
+        role_desc,
+      </if>
+      <if test="create_user != ''" >
+        create_user,
+      </if>
+      <if test="create_time != ''" >
+        create_time,
+      </if>
+      <if test="update_user != ''" >
+        update_user,
+      </if>
+      <if test="update_time != ''" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="role_name != ''" >
+        #{role_name,jdbcType=VARCHAR},
+      </if>
+      <if test="role_desc != ''" >
+        #{role_desc,jdbcType=VARCHAR},
+      </if>
+      <if test="create_user != ''" >
+        #{create_user,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != ''" >
+        #{create_time,jdbcType=VARCHAR},
+      </if>
+      <if test="update_user != ''" >
+        #{update_user,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != ''" >
+        #{update_time,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntc.paas.plat.entity.Role" >
+    update ntc_role
+    <set >
+      <if test="role_name != ''" >
+        role_name = #{role_name,jdbcType=VARCHAR},
+      </if>
+      <if test="role_desc != ''" >
+        role_desc = #{role_desc,jdbcType=VARCHAR},
+      </if>
+       <if test="role_count != 0" >
+        role_count = #{role_count,jdbcType=INTEGER},
+      </if>
+      <if test="create_user != ''" >
+        create_user = #{create_user,jdbcType=VARCHAR},
+      </if>
+      <if test="create_time != ''" >
+        create_time = #{create_time,jdbcType=VARCHAR},
+      </if>
+      <if test="update_user != ''" >
+        update_user = #{update_user,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != ''" >
+        update_time = #{update_time,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ntc.paas.plat.entity.Role" >
+    update ntc_role
+    set role_name = #{role_name,jdbcType=VARCHAR},
+      role_desc = #{role_desc,jdbcType=VARCHAR},
+      update_user = #{update_user,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+
+  <select id="queryListByCond" resultMap="BaseResultMap" parameterType="com.ntc.paas.plat.model.RoleQuery" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_role
+    where 1 = 1
+    and id != 100001
+     <if test="role_name != ''">
+        and role_name like CONCAT(CONCAT('%',#{role_name},'%'))
+     </if>
+     order by update_time desc
+  </select>
+  
+  
+  <select id="queryListByPage" resultMap="BaseResultMap" parameterType="com.ntc.paas.plat.model.RoleQuery" >
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_role
+    where 1 = 1
+    and id != 100001
+     <if test="role_name != ''">
+        and role_name like CONCAT(CONCAT('%',#{role_name},'%'))
+     </if>
+        order by update_time desc
+  </select>
+  
+  <update id="updateStatus" parameterType="com.ntc.paas.plat.entity.Role" >
+    update ntc_role
+    set
+      status = #{status,jdbcType=INTEGER},
+      update_user = #{update_user,jdbcType=VARCHAR},
+      update_time = #{update_time,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>

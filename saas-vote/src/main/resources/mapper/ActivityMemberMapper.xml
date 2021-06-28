@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ntc.paas.plat.dao.ActivityMemberDao">
+  <resultMap id="BaseResultMap" type="com.ntc.paas.plat.entity.ActivityMember">
+    <id column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="activity_id" property="activityId" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="MemberResultMap" type="com.ntc.paas.plat.entity.ActivityMember">
+    <id column="id" property="id" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="activity_id" property="activityId" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="member_id" property="memberId" javaType="java.lang.Long" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="candidate_name" property="candidateName" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="candidate_photo" property="candidatePhoto" javaType="java.lang.String" jdbcType="VARCHAR" />
+    <result column="votes" property="votes" javaType="java.lang.Integer" jdbcType="INTEGER" />
+    <result column="exist_flag"  property="existFlag" javaType="java.lang.Integer" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, activity_id, member_id, create_time, update_time
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_activity_member
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectByActMemberId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ntc_activity_member
+    where activity_id = #{activityId,jdbcType=BIGINT}
+    and   member_id = #{memberId,jdbcType=BIGINT}
+  </select>
+  
+  <select id="selectAllList" resultMap="MemberResultMap">
+ 	SELECT 
+      0 as activity_id, s.id as member_id, s.create_time, s.update_time, s.candidate_name, s.candidate_photo
+    FROM ntc_member s
+    ORDER BY s.id DESC
+  </select>
+  
+  <select id="selectExistList" parameterType="java.lang.Long" resultMap="MemberResultMap">
+ 	SELECT 
+      0 as activity_id, s.id as member_id, s.create_time, s.update_time, s.candidate_name, s.candidate_photo,
+      (SELECT IF(v.member_id IS NULL, 0, 1) FROM ntc_activity_member v WHERE v.activity_id = #{activityId,jdbcType=BIGINT} AND v.member_id = s.id) AS exist_flag
+    FROM ntc_member s
+    ORDER BY s.id DESC
+  </select>
+  
+  <select id="selectListByActId" parameterType="java.lang.Long" resultMap="MemberResultMap">
+ 	SELECT 
+      m.id, m.activity_id, m.member_id, m.create_time, m.update_time, s.candidate_name, s.candidate_photo,
+      (SELECT COUNT(v.member_id) FROM ntc_user_vote v WHERE v.activity_id = m.activity_id AND v.member_id = m.member_id) as votes
+    FROM ntc_activity_member m
+    LEFT JOIN ntc_member s
+    ON s.id = m.member_id
+    WHERE m.activity_id = #{activityId,jdbcType=BIGINT}
+    order by votes desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ntc_activity_member
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <delete id="deleteByActivityId" parameterType="java.lang.Long">
+    delete from ntc_activity_member
+    where activity_id = #{activityId,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insert" parameterType="com.ntc.paas.plat.entity.ActivityMember" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_activity_member (id, activity_id, member_id, 
+      create_time, update_time)
+    values (#{id,jdbcType=BIGINT}, #{activityId,jdbcType=BIGINT}, #{memberId,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=VARCHAR}, #{updateTime,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.ntc.paas.plat.entity.ActivityMember" useGeneratedKeys="true" keyProperty="id">
+    insert into ntc_activity_member
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="activityId != null">
+        activity_id,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="activityId != null">
+        #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.ntc.paas.plat.entity.ActivityMember">
+    update ntc_activity_member
+    <set>
+      <if test="activityId != null">
+        activity_id = #{activityId,jdbcType=BIGINT},
+      </if>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="com.ntc.paas.plat.entity.ActivityMember">
+    update ntc_activity_member
+    set activity_id = #{activityId,jdbcType=BIGINT},
+      member_id = #{memberId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=VARCHAR},
+      update_time = #{updateTime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+</mapper>
