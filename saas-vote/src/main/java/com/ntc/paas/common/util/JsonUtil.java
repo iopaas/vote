@@ -15,9 +15,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  * Json 助手类
  * 
  * @author allen.yuan
- * @date 2018年7月17日 下午5:17:19
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public class JsonUtil {
 

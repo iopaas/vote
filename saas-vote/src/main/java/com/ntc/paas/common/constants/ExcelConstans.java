@@ -4,9 +4,7 @@ package com.ntc.paas.common.constants;
  * Excel 导出常量
  * 
  * @author allen.yuan
- * @date 2018年6月16日 下午5:58:10
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月29日 下午5:28:06
  */
 public class ExcelConstans {
 

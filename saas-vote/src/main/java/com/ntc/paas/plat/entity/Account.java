@@ -6,9 +6,7 @@ import java.io.Serializable;
  * 账号表-实体类
  * 
  * @author allen.yuan
- * @date 2018年5月16日 上午10:42:27
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public class Account extends BaseEntity implements Serializable {
 

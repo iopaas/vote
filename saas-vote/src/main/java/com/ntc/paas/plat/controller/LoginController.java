@@ -41,9 +41,7 @@ import io.swagger.annotations.ApiOperation;
  * 账号登录&退出-接口
  * 
  * @author allen.yuan
- * @date 2018年5月14日 下午2:47:14
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 @Api(description = "登录&退出管理")
 @RequestMapping("/api/plat/comm")

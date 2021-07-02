@@ -3,12 +3,10 @@ package com.ntc.paas.common.model;
 import java.io.Serializable;
 
 /**
- * 
+ * 文件上传返回类
  * 
  * @author allen.yuan
- * @date 2018年5月17日 上午9:09:00
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月25日 下午3:28:11
  */
 public class FileUploadModel implements Serializable {
 

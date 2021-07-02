@@ -12,6 +12,7 @@
         </el-card>
         <h5 class="title" style="margin: 15px 0;">
             投票用户
+            <el-button type="primary" @click="goBack()" icon="el-icon-arrow-left" style="margin-left:20px;">返回</el-button>
         </h5>
         <el-card class="box-card" shadow="never" :body-style="{ padding: 0 }">
             <el-table class="w-100" :data="tableData" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
@@ -162,6 +163,10 @@ export default {
             this.getTableData({
                 pageNum: 1,
             });
+        },
+
+        goBack(){
+          this.$router.go(-1);//返回上一层
         },
     },
 };

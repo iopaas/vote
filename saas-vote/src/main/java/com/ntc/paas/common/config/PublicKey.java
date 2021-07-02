@@ -1,12 +1,10 @@
 package com.ntc.paas.common.config;
 
 /**
- * Redis key 配置-系统
+ * Public key 配置-系统
  * 
  * @author allen.yuan
- * @date 2018年6月29日 下午5:28:06
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月29日 下午5:28:06
  */
 public interface PublicKey {
 
@@ -26,18 +24,13 @@ public interface PublicKey {
 	// 存储数据-field(如：%s：主键ID)
 	String PS_FIELD = "%s";
 
-	// 存储数据-field(如：%s::%s：企业ID_设备ID)
+	// 存储数据-field(如：%s::%s：用户ID_投票ID)
 	String PPS_FIELD = "%s::%s";
-
-	// 存储数据 -field(如：%s::%s::%s：企业ID_设备ID_传感器ID)
-	String PPPS_FIELD = "%s::%s::%s";
 
 	// 存储数据 -field(如：%s_%s：下划线分割参数)
 	String P_PS_FIELD = "%s_%s";
 
 	// 存储数据 -field(如：%s_%s_%s：下划线分割参数)
 	String P_P_PS_FIELD = "%s_%s_%s";
-
-
 
 }

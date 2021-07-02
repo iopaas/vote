@@ -18,6 +18,32 @@ export function queryMemberList(data) {
   });
 }
 
+// 查询候选人
+export function queryMember(data) {
+  return request({
+    url: "/api/plat/member/query",
+    method: "get",
+    params: data,
+  });
+}
+// 新增候选人
+export function addMember(data) {
+  return request({
+    url: "/api/plat/member/add",
+    method: "post",
+    data,
+  });
+}
+
+// 编辑候选人
+export function updateMember(data) {
+  return request({
+    url: "/api/plat/member/update",
+    method: "put",
+    data,
+  });
+}
+
 // 保存投票活动
 export function addActivity(data) {
   return request({
@@ -27,11 +53,11 @@ export function addActivity(data) {
   });
 }
 
-// 保存投票活动
+// 修改投票活动
 export function updateActivity(data) {
   return request({
     url: "/api/plat/activity/update",
-    method: "post",
+    method: "put",
     data,
   });
 }

@@ -7,9 +7,7 @@ import java.io.Serializable;
  * 
  *
  * @author allen.yuan
- * @date 2018年5月15日 上午9:26:55
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public class AccountQuery implements Serializable {
 

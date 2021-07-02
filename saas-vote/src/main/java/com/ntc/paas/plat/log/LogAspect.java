@@ -24,8 +24,7 @@ import com.ntc.paas.common.util.JsonUtil;
  * spring日志切面拦截器及处理-spring自定义注解
  *
  * @author allen.yuan
- * @date 2021年6月23日 上午10:06:40
- * @Copyright © 2021 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 @Aspect
 @Component

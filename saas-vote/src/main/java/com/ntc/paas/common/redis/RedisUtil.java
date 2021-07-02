@@ -20,9 +20,8 @@ import com.ntc.paas.common.util.JsonUtil;
  * Redis 操作工具类
  * 
  * @author allen.yuan
- * @date 2018年6月11日 下午12:53:03
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
+ * 
  */
 @Component
 public class RedisUtil {

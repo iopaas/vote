@@ -15,9 +15,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  * Redis分部式锁
  * 
  * @author allen.yuan
- * @date 2018年6月15日 下午2:52:25
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public class RedisLock {
 

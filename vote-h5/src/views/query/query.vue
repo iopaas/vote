@@ -65,7 +65,7 @@ export default {
         list: [
         ],
         pageNum: 0, // 第几个
-        pageSize: 5, // 一页几个
+        pageSize: 10, // 一页几个
         total: 0, //总数量
     }),
     components: { BackToTop },

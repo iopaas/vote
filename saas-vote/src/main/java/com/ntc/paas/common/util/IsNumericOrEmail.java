@@ -7,9 +7,7 @@ import java.util.regex.Pattern;
  * 
  *
  * @author allen.yuan
- * @date 2018年5月14日 上午11:27:52
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public class IsNumericOrEmail {
 

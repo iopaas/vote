@@ -15,8 +15,6 @@ import org.springframework.core.annotation.Order;
  * 
  * @author allen.yuan
  * @date 2018年5月17日 上午9:38:01
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
  */
 @Configuration
 @Order(2)

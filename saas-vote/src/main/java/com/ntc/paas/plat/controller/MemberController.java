@@ -1,15 +1,16 @@
 package com.ntc.paas.plat.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.github.pagehelper.Page;
 import com.ntc.paas.common.enums.ConmmonEnum;
-import com.ntc.paas.common.enums.StatusEnum;
 import com.ntc.paas.common.model.DefaultValue;
 import com.ntc.paas.common.model.PageInfo;
 import com.ntc.paas.common.model.RespModel;
@@ -31,7 +32,6 @@ import io.swagger.annotations.ApiOperation;
  * 
  * @author allen.yuan
  * @date 2021年6月22日 下午7:38:21
- * @Copyright © 2021 NTC. All Rights Reserved.
  */
 @Api(description = "候选人成员管理")
 @RequestMapping("/api/plat/member")
@@ -74,10 +74,9 @@ public class MemberController {
 	 */
 	@SystemLog(opType = OperateType.Modify)
 	@ApiOperation(value = "修改候选人成员", notes = "修改一个候选人成员&投票时间")
-	@PostMapping(value = "/update")
+	@PutMapping(value = "/update")
 	public RespModel<?> updateMember(@RequestBody Member vo) {
 
-		vo.setStatus(StatusEnum.Enable.getStatus());
 		vo.setUpdateTime(DateUtil.getDateTime());
 		memberService.updateByPrimaryKey(vo);
 
@@ -94,7 +93,7 @@ public class MemberController {
 	@SystemLog(opType = OperateType.Delete)
 	@ApiOperation(value = "删除候选人成员", notes = "按Id删除")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "id", value = "主键ID", required = false, dataType = "long") })
-	@GetMapping(value = "/delete")
+	@DeleteMapping(value = "/delete")
 	public RespModel<?> deleteMember(Long id) {
 
 		RespModel<?> respModel = null;

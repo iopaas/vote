@@ -32,7 +32,7 @@
         </el-card>
         <h5 class="title" style="margin: 15px 0;">
             活动列表
-            <el-button type="success" @click="openDialog(0)" icon="el-icon-edit" style="margin-left:10px;">发起投票活动</el-button>
+            <el-button type="success" @click="openDialog(0)" icon="el-icon-edit" style="margin-left:30px;">发起投票活动</el-button>
         </h5>
 
         <el-card class="box-card" shadow="never" :body-style="{ padding: 0 }">
@@ -43,18 +43,24 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="activityTitle" label="投票主题" width="160"> </el-table-column>
-                <el-table-column prop="activityDesc" label="投票内容" width="300"> </el-table-column>
+                <el-table-column prop="activityDesc" label="投票内容" min-width="300"> </el-table-column>
                 <el-table-column prop="startTime" label="投票时段" width="138" >
                     <template slot-scope="scope">
-                        {{scope.row.startTime}}{{scope.row.endTime}}
-                    </template>    
+                        <div>{{scope.row.startTime}}</div>
+                        <div>{{scope.row.endTime}}</div>
+                    </template>      
                 </el-table-column>
-                <el-table-column prop="enabled" label="状态" width="80" >
-                     <template slot-scope="scope">
-                        {{ scope.row.enabled === 0 ? '不可投' : scope.row.enabled === 1 ? '可投' : '' }}
+                <el-table-column prop="enabled" label="活动状态" width="100" >
+                     <template slot-scope="scope" v-if="statusList[scope.row.status]">
+                       {{ statusList[scope.row.status].label }}
                     </template>
                 </el-table-column>
-                <el-table-column label="投票统计"  width="300">
+                <el-table-column label="编辑状态" width="100">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="openDialog(scope.row.id)"  size="small">编辑</el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column label="投票统计"  min-width="300">
                     <el-progress :text-inside="true" :stroke-width="20" :percentage="50"></el-progress>
                     <template slot-scope="scope">
 						<div v-for="(item, index) in tableData[scope.$index].actMemberList" :key="index" style="line-height:40px;">
@@ -72,11 +78,6 @@
                         <el-button type="text" @click="goVoteUser(scope.row.id, scope.row.activityTitle, scope.row.activityDesc)"  size="small">查看</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column label="编辑" width="70">
-                    <template slot-scope="scope">
-                        <el-button type="text" @click="openDialog(scope.row.id)"  size="small">编辑</el-button>
-                    </template>
-                </el-table-column>
             </el-table>
             <el-pagination
                 class="pagination"
@@ -90,23 +91,29 @@
             ></el-pagination>
         </el-card>
 
-        <service-dialog :show.sync="show" :pkId="pkId" />
+        <childDialog :show.sync="show" :title="title" :pkId="pkId" :fatherMethod="fatherMethod"></childDialog>
     </div>
 </template>
 
 <script>
 import { queryActivityListPage } from '@/api/index';
-import serviceDialog  from "./activity-detail.vue";
+import childDialog  from "./activity-detail.vue";
 import axios from 'axios';
 import { format } from 'date-fns';
 export default {
     components: {
-        serviceDialog
+        childDialog
     },
     data() {
         return {
             show: false,
             pkId: 0,
+            title: '',
+            statusList: [
+                { value: 0, label: '未开启' },
+                { value: 1, label: '开启中' },
+                { value: 2, label: '已结束' },
+            ],
             // 切换分页等操作是否带上搜索条件
             copySearchForm: {
                 activityTitle: '',
@@ -121,10 +128,10 @@ export default {
             //表格数据
             tableData: [
                 {
-                    id: '1', // 预约ID
+                    id: 0, // 预约ID
                     empactivityTitle: '', // 操作人
-                    startTime: '2021-06-25', // 预约日期
-                    endTime: '2021-06-25', // 预约时间
+                    startTime: '', // 预约日期
+                    endTime: '', // 预约时间
                 },
             ],
             // 分页
@@ -139,36 +146,22 @@ export default {
     
     },
     mounted() {
-        this.getTableData({
-            pageNum: 1,
-        });
-
-        // this.serviceDialog.$on('query',() => {
-        //     console.log('响应child1的点击事件');
-        // })
+        this.fatherMethod(false);
     },
     methods: {
-        /**
-         * 用户设置对话框指令
-         * @param {String} command 指令值
-         */
-        // userSettingCommand(command) {
-        //     switch (command) {
-        //         case 'logout':
-        //             this.signOut();
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        // },
-        fatherMethod(str) {
-           this.getTableData({
-                pageNum: 1,
+        fatherMethod(isUpate) {
+            let pN = 1;
+            if(isUpate && this.tablePagination.pageNo){
+                pN = this.tablePagination.pageNo;
+            }
+            this.getTableData({
+                pageNum: pN,
             });
         },
         openDialog(id) {
-            this.show = true;
             this.pkId = id;
+            this.title = (this.pkId === 0) ? '创建投票活动' : '编辑投票活动';
+            this.show = true;
         } ,
         // 查询
         search() {
@@ -189,11 +182,13 @@ export default {
             if (params.times && params.times.length) {
                 params.startTime = params.times[0];
                 params.endTime = params.times[1];
+                params = [];
             } else {
                 params.startTime = '';
                 params.endTime = '';
             }
-
+            //this.tablePagination.currentPage = opts.pageNum;
+            
             queryActivityListPage(params).then((res) => {
                 if (res.code && res.code === 1) {
                     this.tableData = res.data.list;

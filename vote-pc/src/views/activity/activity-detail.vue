@@ -22,27 +22,26 @@
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
                         value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions"
                     >
                     </el-date-picker>
                 </el-form-item>
-       
-                <el-form-item label="是否开启">
-                    <el-switch v-model="state"
-                        active-color="#13ce66"
-                        inactive-color="#ff4949"
-                        :active-value="1"
-                        :inactive-value="0"
-                        @change="changeSwitch($event,form.status)">
-                    </el-switch>
-                </el-form-item>
 
                <el-form-item label="候选人员" prop="mermbers">
-                    <li v-for="(item, index) in form.actMemberList" :key="index" style="line-height:40px;">
-                        <el-checkbox v-model="item.checked"  style="vertical-align: 0px;" :checked="item.existFlag==1" :label="item.id" @change="chooseItem(item.memberId)">
+                    <span v-for="(item, index) in form.actMemberList" :key="index" style="line-height:40px; width:300px;display: inline-block;">
+                        <el-checkbox v-model="item.checked"  style="vertical-align: 0px;" :label="item.id" :checked="item.existFlag==1" @change="chooseItem(item.memberId)">
                             <img :src="item.candidatePhoto" class="g"  width="30px" height="30px" style="vertical-align: -10px;">
                             <span style="margin-left:5px;">{{item.candidateName}}</span>
                         </el-checkbox>
-                    </li>
+                    </span>
+                </el-form-item>
+
+                <el-form-item label="活动状态">
+                    <el-radio-group v-model="form.status">
+                        <el-radio :label="0">未开启</el-radio>
+                        <el-radio :label="1">开启中</el-radio>
+                        <el-radio :label="2">结束</el-radio>
+                    </el-radio-group>
                 </el-form-item>
 
                 <el-form-item style="text-algin:center">
@@ -61,9 +60,32 @@ import { getToken } from '@/utils/auth';
 import axios from 'axios';
 import { format } from 'date-fns';
 export default {
+
     data() {
+
+        var checkTimes = (rule, value, callback) => {
+            if (!this.form.times || (this.form.times.length < 2)) {
+                callback(new Error('请选择投票开始时间和结束时间'));
+            } else {
+                callback();
+            }
+        };
+
+        var checkMermbers = (rule, value, callback) => {
+            if (this.form.memberIds.length < 2) {
+                callback(new Error('请选择至少2名候选人'));
+            } else {
+                callback();
+            }
+        };
+
         return {
             visible: this.show,
+            statusList: [
+                { value: 0, label: '未开启' },
+                { value: 1, label: '开启中' },
+                { value: 2, label: '已结束' },
+            ],
             form: {
                 id: 0,
                 activityTitle: '',
@@ -75,20 +97,27 @@ export default {
                 memberIds: [],
                 actMemberList: [],
             },
-             rules: {
+            rules: {
                 activityTitle: [
-                    { required: true, message: '主题名称', trigger: 'blur' },
+                    { required: true, message: '请填写', trigger: 'blur' },
                     { min: 2, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur' }
                 ],
                 activityDesc: [
-                    { required: true, message: '主题描述', trigger: 'blur' },
+                    { required: true, message: '请填写', trigger: 'blur' },
                     { min: 2, max: 50, message: '长度在 10 到 500 个字符', trigger: 'blur' }
                 ],
+                times: [
+                    { required: false, validator: checkTimes, message: '请选择投票开始时间和结束时间', trigger: 'blur' }
+                ],
                 mermbers: [
-                    { required: false, message: '选中候选人', trigger: 'blur' }
+                    { required: false, validator: checkMermbers, message: '请选择至少2名候选人', trigger: 'blur' }
                 ]
-                }
-
+            },
+            pickerOptions: {
+                disabledDate(time) {
+                    return (Date.now() - 3600 * 1000 * 24) >= time.getTime();
+                },
+            }
         };
     },
     props: {
@@ -103,13 +132,17 @@ export default {
         pkId: {
             type: Number,
             default: 0
+        },
+        fatherMethod: {
+            type: Function,
+            default: null
         }
+
     },
     watch: {
         show () {
             this.visible = this.show;
             this.form.id = this.pkId;
-            this.title = this.pkId == 0 ? '创建投票活动' : '编辑投票活动';
             if(this.visible === true){
               this._queryActivity();
             }
@@ -126,30 +159,30 @@ export default {
          * 用户设置对话框指令
          * @param {String} command 指令值
          */
-        // 取消
+        // 取消对话框
         closeDialog(id) {
-            this.show = false;
             this.form.id = id;
-            this.$emit('closepop');
+            this.form.actMemberList = [];
+            this.$emit('update:show', false);
         },
-        changeSwitch(e,value){
-            this.form.status = value === 1 ? 1: 0;
+        
+        goAfterMethod(isUpate) {
+            this.closeDialog(0);
+            if (this.fatherMethod) {
+                this.fatherMethod(isUpate);
+            }
         },
-        chooseItem(val) {
-            if(this.form.memberIds.indexOf(val)){ 
-                var index = this.form.memberIds.findIndex(item =>{
-　　　　　　　　　　if(item==val){
-　　　　　　　　　　　　return true
-　　　　　　　　　　}
-　　　　　　　　})
-              if(index < 0){
-                this.form.memberIds.push(val);
-              }else{
-                this.form.memberIds.splice(index, 1);
-              }
-            } 
-            
+
+        chooseItem(id) {
+            let arr = this.form.memberIds;
+            if(arr.indexOf(id) === -1){
+               arr.push(id);
+            }else{
+               arr.splice(arr.indexOf(id), 1); 
+            }
+            this.form.memberIds = arr;
         },
+
         /**
          * 获取候选人列表
          * 
@@ -164,7 +197,9 @@ export default {
                     if(this.form.startTime && this.form.endTime){
                       this.form.times = [this.form.startTime.substring(0,10), this.form.endTime.substring(0,10)];
                     }
-                    
+                    if(params.id === 0){
+                      this.form.status = 0;
+                    }
                 }
             });
         },
@@ -180,26 +215,24 @@ export default {
                           params.startTime = params.times[0] +' 00:00:00';
                           params.endTime = params.times[1] +' 23:59:59';
                         }
-                        params.status = 1;
                         params.actMemberList = [];
                         
-                        if(params.id ==0){
+                        if(params.id === 0){
                             addActivity(params).then((res) => {
                                 if (res.code && res.code === 1) {
                                     this.form.id = res.data.param;
-                                    this.childMethod();
+                                    this.goAfterMethod(false);
                                 }
                             });   
                         }else{
                             updateActivity(params).then((res) => {
                                 if (res.code && res.code === 1) {
-                                   this.childMethod();
+                                   this.goAfterMethod(true);
                                 }
                             });
                         } 
                         
-                        this.show = false;
-                        this.form.id = 0;
+                       
                     } else {
                         return false;
                     }
@@ -207,9 +240,6 @@ export default {
             
                 
         },
-        childMethod() {
-            this.$parent.fatherMethod('search');
-        }
     },
 };
 </script>

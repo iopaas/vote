@@ -5,9 +5,7 @@ package com.ntc.paas.common.constants;
  * 时间定义常量类
  * 
  * @author allen.yuan
- * @date 2018年7月3日 下午1:44:53
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月24日 下午11:28:12
  */
 public class TimeConstants {
 

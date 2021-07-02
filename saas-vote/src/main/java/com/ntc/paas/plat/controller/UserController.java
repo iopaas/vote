@@ -1,8 +1,10 @@
 package com.ntc.paas.plat.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +33,6 @@ import io.swagger.annotations.ApiOperation;
  * 
  * @author allen.yuan
  * @date 2021年6月22日 下午7:38:21
- * @Copyright © 2021 NTC. All Rights Reserved.
  */
 @Api(description = "用户管理")
 @RequestMapping("/api/plat/user")
@@ -78,7 +79,7 @@ public class UserController {
 	 */
 	@SystemLog(opType = OperateType.Modify)
 	@ApiOperation(value = "修改用户", notes = "修改一个用户&投票时间")
-	@PostMapping(value = "/update")
+	@PutMapping(value = "/update")
 	public RespModel<?> updateUser(@RequestBody User vo) {
 
 		vo.setStatus(StatusEnum.Enable.getStatus());
@@ -98,7 +99,7 @@ public class UserController {
 	@SystemLog(opType = OperateType.Delete)
 	@ApiOperation(value = "删除用户", notes = "按Id删除")
 	@ApiImplicitParams({ @ApiImplicitParam(name = "id", value = "主键ID", required = false, dataType = "long") })
-	@GetMapping(value = "/delete")
+	@DeleteMapping(value = "/delete")
 	public RespModel<?> deleteUser(Long id) {
 
 		RespModel<?> respModel = null;

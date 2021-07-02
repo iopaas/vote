@@ -110,7 +110,7 @@ export default {
                 return rel;
             }
             
-            const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
+            const regEmail = /^([A-Za-z0-9_-|\.])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/;
             if (!regEmail.test(data.email)) {
                 rel = {
                     state: false,

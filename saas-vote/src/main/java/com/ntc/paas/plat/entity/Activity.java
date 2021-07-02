@@ -50,7 +50,7 @@ public class Activity {
 	}
 
 	public Long getId() {
-		return id;
+		return id == null ? 0 : id;
 	}
 
 	public void setId(Long id) {
@@ -58,11 +58,11 @@ public class Activity {
 	}
 
 	public String getActivityTitle() {
-		return activityTitle;
+		return activityTitle == null ? "" : activityTitle.trim();
 	}
 
 	public void setActivityTitle(String activityTitle) {
-		this.activityTitle = activityTitle == null ? null : activityTitle.trim();
+		this.activityTitle = activityTitle;
 	}
 
 	public String getStartTime() {
@@ -106,11 +106,11 @@ public class Activity {
 	}
 
 	public String getActivityDesc() {
-		return activityDesc;
+		return activityDesc == null ? "" : activityDesc.trim();
 	}
 
 	public void setActivityDesc(String activityDesc) {
-		this.activityDesc = activityDesc == null ? null : activityDesc.trim();
+		this.activityDesc = activityDesc;
 	}
 
 	public List<Long> getMemberIds() {
@@ -130,7 +130,7 @@ public class Activity {
 	}
 
 	public Integer getEnabled() {
-		return enabled = DateUtil.dateExpire(this.getStartTime(), this.getEndTime()) ? 1 : 0;
+		return enabled = (DateUtil.dateExpire(this.getStartTime(), this.getEndTime()) && this.getStatus() == 1) ? 1 : 0;
 	}
 
 	public void setEnabled(Integer enabled) {

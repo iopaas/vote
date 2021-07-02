@@ -6,8 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +44,6 @@ import io.swagger.annotations.ApiOperation;
  * 
  * @author allen.yuan
  * @date 2021年6月22日 下午12:38:21
- * @Copyright © 2021 NTC. All Rights Reserved.
  */
 @Api(description = "账号管理")
 @RequestMapping("/api/plat/account")
@@ -108,7 +110,7 @@ public class AccountController {
 	 */
 	@SystemLog(opType = OperateType.Modify)
 	@ApiOperation(value = "修改账号", notes = "")
-	@PostMapping(value = "/update")
+	@PutMapping(value = "/update")
 	public RespModel<?> updateAccount(@RequestBody Account vo) {
 
 		RespModel<?> respModel = null;
@@ -139,7 +141,7 @@ public class AccountController {
 	 */
 	@SystemLog(opType = OperateType.Delete)
 	@ApiOperation(value = "删除账号", notes = "")
-	@GetMapping(value = "/delete")
+	@DeleteMapping(value = "/delete")
 	public RespModel<?> deleteAccount(@RequestParam(value = "id", required = true) Long id,
 			@RequestHeader HttpHeaders headers) {
 
@@ -253,9 +255,8 @@ public class AccountController {
 	 */
 	@SystemLog(opType = OperateType.Modify)
 	@ApiOperation(value = "修改账号状态", notes = "禁用&启用账号")
-	@GetMapping(value = "/updateStatus")
-	public RespModel<?> updateAccountStatus(@RequestParam(value = "id", required = true) Long id,
-			@RequestParam(value = "status", required = true) Integer status) {
+	@PutMapping(value = "/updateStatus/{id}/{staus}")
+	public RespModel<?> updateAccountStatus(@PathVariable("id") Long id, @PathVariable("status") Integer status) {
 
 		RespModel<?> respModel = null;
 		try {

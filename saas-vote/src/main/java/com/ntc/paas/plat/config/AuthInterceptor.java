@@ -30,7 +30,6 @@ import com.ntc.paas.common.util.JsonUtil;
  * 
  * @author allen.yuan
  * @date 2021年6月22日 下午13:29:15
- * @Copyright © 2021 NTC. All Rights Reserved.
  */
 @Component
 public class AuthInterceptor implements HandlerInterceptor {

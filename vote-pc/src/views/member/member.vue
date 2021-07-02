@@ -17,15 +17,11 @@
                 <el-form-item>
                     <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
                 </el-form-item>
-                <!--
-                <el-form-item>
-                    <el-button type="success" icon="el-icon-edit" @click="add" style="margin-right:15px;">添加</el-button>
-                </el-form-item>
-                -->
             </el-form>
         </el-card>
         <h5 class="title" style="margin: 15px 0;">
             候选人列表
+            <el-button type="success" @click="openDialog(0)" icon="el-icon-edit" style="margin-left:20px;">新增候选人</el-button>
         </h5>
         <el-card class="box-card" shadow="never" :body-style="{ padding: 0 }">
             <el-table class="w-100" :data="tableData" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
@@ -35,7 +31,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="candidatePhoto" label="头像"  width="120"> 
-                <template slot-scope="scope">
+                <template slot-scope="scope" v-if="scope.row.candidatePhoto != ''">
                     <img :src="scope.row.candidatePhoto" width="50px" height="50px">
                 </template>
                 </el-table-column>
@@ -43,11 +39,16 @@
                 <el-table-column prop="candidateIdCard" label="身份证号" width="120px"> </el-table-column>
                 <el-table-column prop="candidateEmail" label="电子邮箱" > </el-table-column>
                 <el-table-column prop="status" label="状态" width="80px">
-                    <template slot-scope="scope">
+                    <template slot-scope="scope" v-if="statusList[scope.row.status]">
                         {{ statusList[scope.row.status].label }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="createTime" label="录入时间"> </el-table-column>
+                <el-table-column prop="createTime" label="创建时间"> </el-table-column>
+                 <el-table-column label="编辑" width="70">
+                    <template slot-scope="scope">
+                        <el-button type="text" @click="openDialog(scope.row.id)"  size="small">编辑</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <el-pagination
                 class="pagination"
@@ -59,6 +60,8 @@
                 @size-change="tableSizeChange"
                 @current-change="tablePaginationChange"
             ></el-pagination>
+
+            <childDialog :show.sync="show" :title="title" :pkId="pkId" :fatherMethod="fatherMethod"></childDialog>
         </el-card>
     </div>
 </template>
@@ -66,11 +69,18 @@
 <script>
 import {  queryMemberListPage } from '@/api/index';
 import { getToken, getAccount } from '@/utils/auth';
+import childDialog  from "./member-detail.vue";
 import axios from 'axios';
 import { format } from 'date-fns';
 export default {
+    components: {
+        childDialog
+    },
     data() {
         return {
+            show: false,
+            pkId: 0,
+            title: '',
             // 状态列表
             statusList: [
                 { value: 0, label: '全部' },
@@ -112,24 +122,25 @@ export default {
         
     },
     mounted() {
-        this.getTableData({
-            pageNum: 1,
-        });
+       this.fatherMethod(false);
     },
     methods: {
-        /**
-         * 用户设置对话框指令
-         * @param {String} command 指令值
-         */
-        // userSettingCommand(command) {
-        //     switch (command) {
-        //         case 'logout':
-        //             this.signOut();
-        //             break;
-        //         default:
-        //             break;
-        //     }
-        // },
+        
+        openDialog(id) {
+            this.pkId = id;
+            this.title = (this.pkId === 0) ? '创建候选人' : '编辑候选人';
+            this.show = true;
+        } ,
+
+        fatherMethod(isUpate) {
+            let pN = 1;
+            if(isUpate && this.tablePagination.pageNo){
+                pN = this.tablePagination.pageNo;
+            }
+            this.getTableData({
+                pageNum: pN,
+            });
+        },
 
         // 查询
         search() {
@@ -154,6 +165,7 @@ export default {
                 params.startTime = '';
                 params.endTime = '';
             }
+            //this.tablePagination.currentPage = opts.pageNum;
 
             queryMemberListPage(params).then((res) => {
                 if (res.code && res.code === 1) {

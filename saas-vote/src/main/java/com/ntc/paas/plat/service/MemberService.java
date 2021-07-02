@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.ntc.paas.common.enums.StatusEnum;
 import com.ntc.paas.common.exception.BusinessException;
 import com.ntc.paas.common.util.DateUtil;
 import com.ntc.paas.plat.dao.MemberDao;
@@ -19,7 +18,6 @@ import com.ntc.paas.plat.model.MemberQuery;
  * 
  * @author allen.yuan
  * @date 2021年6月23日 上午10:21:40
- * @Copyright © 2021 NTC. All Rights Reserved.
  */
 @Service
 public class MemberService {
@@ -29,7 +27,6 @@ public class MemberService {
 
 	public int insert(Member vo) throws BusinessException {
 
-		vo.setStatus(StatusEnum.Enable.getStatus());
 		vo.setCreateTime(DateUtil.getDateTime());
 		vo.setUpdateTime(vo.getCreateTime());
 		return memberDao.insert(vo);

@@ -4,9 +4,7 @@ package com.ntc.paas.common.enums;
  * 登录类型定义
  * 
  * @author allen.yuan
- * @date 2018年5月19日 下午3:13:55
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月24日 下午5:28:06
  */
 public enum LoginTypeEnum {
 

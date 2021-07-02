@@ -10,9 +10,7 @@ import java.io.Serializable;
  * 克隆方法
  * 
  * @author allen.yuan
- * @date 2018年8月2日 下午5:29:24
- * @version 中设E-电梯平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public class CloneUtils {
 

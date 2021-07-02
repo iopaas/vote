@@ -3,10 +3,8 @@ package com.ntc.paas.common.enums;
 /**
  * 角色类型
  * 
- *
- * @date 2018年6月15日 下午4:56:31
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @author allen.yuan
+ * @date 2021年6月24日 下午5:28:06
  */
 public enum RoleTypeEnum {
 

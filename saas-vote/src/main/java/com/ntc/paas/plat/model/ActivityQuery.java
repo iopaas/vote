@@ -7,8 +7,7 @@ import java.io.Serializable;
  * 
  *
  * @author allen.yuan
- * @date 2021年6月25日 下午14:11:21
- * @Copyright © 2021 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public class ActivityQuery implements Serializable {
 	private static final long serialVersionUID = -2563427234149178532L;

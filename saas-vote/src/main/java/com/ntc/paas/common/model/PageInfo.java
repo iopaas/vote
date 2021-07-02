@@ -11,9 +11,7 @@ import com.github.pagehelper.Page;
  * 
  *
  * @author allen.yuan
- * @date 2018年5月15日 上午9:18:54
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月25日 下午3:28:11
  */
 public class PageInfo<T> implements Serializable {
 

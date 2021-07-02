@@ -15,7 +15,6 @@ import com.ntc.paas.plat.model.VoteUserQuery;
  * 
  * @author allen.yuan
  * @date 2021年6月23日 上午10:21:40
- * @Copyright © 2021 NTC. All Rights Reserved.
  */
 @Service
 public class UserService {

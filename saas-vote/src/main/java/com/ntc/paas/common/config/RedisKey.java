@@ -4,9 +4,7 @@ package com.ntc.paas.common.config;
  * Redis key配置-业务
  * 
  * @author allen.yuan
- * @date 2018年6月29日 下午5:28:06
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月29日 下午5:28:06
  */
 public interface RedisKey {
 

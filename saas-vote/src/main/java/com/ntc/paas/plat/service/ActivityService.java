@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.google.common.base.Objects;
 import com.ntc.paas.common.enums.ConmmonEnum;
 import com.ntc.paas.common.enums.StatusEnum;
 import com.ntc.paas.common.exception.BusinessException;
@@ -23,6 +24,7 @@ import com.ntc.paas.plat.entity.ActivityExt;
 import com.ntc.paas.plat.entity.ActivityMember;
 import com.ntc.paas.plat.entity.User;
 import com.ntc.paas.plat.entity.UserVote;
+import com.ntc.paas.plat.handler.MailSenderTask;
 import com.ntc.paas.plat.model.ActivityQuery;
 import com.ntc.paas.plat.model.VoteUserQuery;
 
@@ -31,7 +33,6 @@ import com.ntc.paas.plat.model.VoteUserQuery;
  * 
  * @author allen.yuan
  * @date 2021年6月23日 上午10:06:40
- * @Copyright © 2021 NTC. All Rights Reserved.
  */
 @Service
 public class ActivityService {
@@ -47,6 +48,9 @@ public class ActivityService {
 
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private MailSenderTask mailSenderTask;
 
 	@Transactional
 	public int insert(Activity record) throws BusinessException {
@@ -81,14 +85,19 @@ public class ActivityService {
 		int result = activityDao.updateByPrimaryKey(record);
 		activityMemberDao.deleteByActivityId(record.getId());
 		record.getMemberIds().forEach(memberId -> {
-			ActivityMember actMember = activityMemberDao.selectByActMemberId(record.getId(),memberId);
-			if(actMember == null){
-			   actMember = new ActivityMember(0L, record.getId(), memberId, record.getCreateTime(),
-					record.getUpdateTime());
-			  activityMemberDao.insert(actMember);
+			ActivityMember actMember = activityMemberDao.selectByActMemberId(record.getId(), memberId);
+			if (actMember == null) {
+				actMember = new ActivityMember(0L, record.getId(), memberId, record.getCreateTime(),
+						record.getUpdateTime());
+				activityMemberDao.insert(actMember);
 			}
 
 		});
+
+		// 活动结束,邮件通知
+		if (2 == record.getStatus()) {
+			mailSenderTask.toSendMail(record.getId());
+		}
 		return result;
 	}
 
@@ -111,8 +120,8 @@ public class ActivityService {
 		if (vo != null) {
 			BeanUtils.copyProperties(vo, actExt);
 			actExt.setActMemberList(activityMemberDao.selectExistList(id));
-			List<Long> mIds =actExt.getActMemberList().stream().filter(m->m.getExistFlag().equals(1)).map(ActivityMember::getMemberId).
-					collect(Collectors.toList());
+			List<Long> mIds = actExt.getActMemberList().stream().filter(m -> m.getExistFlag().equals(1))
+					.map(ActivityMember::getMemberId).collect(Collectors.toList());
 			actExt.setMemberIds(mIds);
 		} else {
 			actExt.setActMemberList(activityMemberDao.selectAllList());

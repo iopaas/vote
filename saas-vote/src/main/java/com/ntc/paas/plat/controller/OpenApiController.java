@@ -46,7 +46,6 @@ import io.swagger.annotations.ApiOperation;
  * 
  * @author allen.yuan
  * @date 2021年6月25日 下午14:11:21
- * @Copyright © 2021 NTC. All Rights Reserved.
  */
 @Api(description = "H5接口管理")
 @RequestMapping("/api/plat/apps")

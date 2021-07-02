@@ -18,9 +18,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  * Json格式化null转""字符串
  * 
  * @author allen.yuan
- * @date 2018年5月17日 上午9:38:01
- * @version PaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 @Configuration
 public class JacksonConfig {

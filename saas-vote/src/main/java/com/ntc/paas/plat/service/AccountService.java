@@ -24,9 +24,7 @@ import com.ntc.paas.plat.model.AccountQuery;
  * 账号管理服务实现类
  *
  * @author allen.yuan
- * @date 2018年5月14日 下午3:40:52
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 @Service
 public class AccountService {

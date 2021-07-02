@@ -132,7 +132,7 @@ export default {
                                     setToken(res.data.token);
                                     setAccount(this.form.username);
                                     console.log(res);
-                                    this.$router.push({ name: 'check' });
+                                    this.$router.push({ name: 'activity' });
                                     // this._queryUser();
                                     // sessionStorage.setItem('user', JSON.stringify({account_number: data.account_number, account_id: data.account_id}));
                                 } else {

@@ -5,9 +5,7 @@ package com.ntc.paas.common.enums;
  * 
  *
  * @author allen.yuan
- * @date 2018年5月14日 下午1:56:31
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月25日 下午12:11:06
  */
 public enum ProcessStatusEnum {
 

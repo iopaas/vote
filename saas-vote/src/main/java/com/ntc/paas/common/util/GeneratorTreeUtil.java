@@ -4,9 +4,7 @@ package com.ntc.paas.common.util;
  * 注册树形菜单生产ID
  * 
  * @author allen.yuan
- * @date 2018年8月31日 下午4:43:03
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public class GeneratorTreeUtil {
 

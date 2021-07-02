@@ -9,9 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * 表实体父类
  * 
  * @author allen.yuan
- * @date 2018年5月16日 上午10:36:51
- * @version SaaS平台_V1.0
- * @Copyright © 2018 NTC. All Rights Reserved.
+ * @date 2021年6月26日 下午2:28:10
  */
 public abstract class BaseEntity {
 
