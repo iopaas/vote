@@ -30,8 +30,9 @@
    
      a.安装mysql8.0 数据库，数据库导入脚本saas-vote_20210624.sql ，创建授权账号votedb/123456.
      b.安装redis5.0 版本，配置授权密码：123456
-     c.使用Eclipse将导入的saas-vote工程，检查修改配置application.properties文件，核对数据库、redis账号及端口。邮件测试需要修改邮件服务器配置。
-      Maven运行 
+     c.使用Eclipse将导入的saas-vote工程，检查修改配置application.properties文件，核对数据库、redis账号及端口。
+       邮件测试需要修改邮件服务器配置。
+       Maven运行 
          VoteApplication.java
      
    4.2 PC端源程序（vote-pc）
@@ -43,7 +44,7 @@
        
    4.3 H5端源程序（vote-h5）
    
-     a.使用Visual Studio Code工具导入vote-pc源码。如果后端服务端口有变化，响应修改vue.config.js 文件。
+     a.使用Visual Studio Code工具导入vote-h5源码。如果后端服务端口有变化，响应修改vue.config.js 文件。
        TERMAIL运行如下：
        npm install
        npm run serve
